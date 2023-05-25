@@ -2,6 +2,7 @@
 
 # HarolDownloader 
 <img src='https://img.shields.io/github/v/release/wasp-byte/HarolDownloader?color=%23FF2021&label=version&style=for-the-badge'> <img src='https://img.shields.io/github/license/wasp-byte/HarolDownloader?color=%23FF2021&style=for-the-badge'>
+
 HarolDownloader is a Python application built with Tkinter that allows you to easily download YouTube videos or audio files. Whether you want to save an individual video, extract audio from a video, or even download videos from a playlist, HarolDownloader has got you covered.
 
 ## Features
@@ -12,7 +13,7 @@ HarolDownloader is a Python application built with Tkinter that allows you to ea
 - Simple and intuitive user interface powered by Tkinter.
 - Ability to select specific videos from a playlist to download.
 
-<img src="readme/main.jpeg" align="left" />
+<img src="readme/main.jpeg" align="center" />
 
 ## Installation
 
@@ -80,13 +81,13 @@ python main.py
 
 8. Using the file dialog choose your preferred file location.
 
-<img src="readme/playlists.jpeg" align="center" />
+<img src="readme/playlist.jpeg" align="center" />
 
 ## Acknowledgments
 
 The HarolDownloader app is inspired by the meme "Hide the Pain Harold," which represents a man smiling despite his hidden pain. The app's name is a playful reference to this meme.
 
-<img src="readme/acknowledgments.jpeg" align="left" />
+<img src="readme/acknowledgments.jpeg" align="center" />
 
 ## License
 
