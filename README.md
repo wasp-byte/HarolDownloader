@@ -1,7 +1,9 @@
 <img src="haroldownloader.ico" align="right" />
 
 # HarolDownloader 
-<img src='https://img.shields.io/github/v/release/wasp-byte/HarolDownloader?color=%23FF2021&label=version&style=for-the-badge'> <img src='https://img.shields.io/github/license/wasp-byte/HarolDownloader?color=%23FF2021&style=for-the-badge'>
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/wasp-byte/HarolDownloader)
+![GitHub](https://img.shields.io/github/license/wasp-byte/HarolDownloader?color=%23FF2021&label=version&style=for-the-badge')
+![GitHub last commit](https://img.shields.io/github/last-commit/wasp-byte/HarolDownloader)
 
 HarolDownloader is a Python application built with Tkinter that allows you to easily download YouTube videos or audio files. Whether you want to save an individual video, extract audio from a video, or even download videos from a playlist, HarolDownloader has got you covered.
 
@@ -96,6 +98,9 @@ HarolDownloader is released under the [MIT License](LICENSE). Feel free to modif
 ## Contributing
 
 Contributions are welcome! If you have any ideas, bug reports, or feature requests, please open an issue or submit a pull request on GitHub. Let's make HarolDownloader even better together.
+
+<a href="https://github.com/FreePlacki"><img src="https://avatars.githubusercontent.com/u/49117148?v=4" title="FreePlacki" width="50" height="50"></a>
+<a href="https://github.com/Fleserig73"><img src="https://avatars.githubusercontent.com/u/88104726?v=4" title="Fleserig73" width="50" height="50"></a>
 
 ## Disclaimer
 
