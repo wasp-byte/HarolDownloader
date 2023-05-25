@@ -12,6 +12,8 @@ HarolDownloader is a Python application built with Tkinter that allows you to ea
 - Simple and intuitive user interface powered by Tkinter.
 - Ability to select specific videos from a playlist to download.
 
+<img src="readme/main.jpeg" align="left" />
+
 ## Installation
 
 1. Ensure you have Python 3.x installed on your system. If not, you can download it from the official Python website: [https://www.python.org/downloads/](https://www.python.org/downloads/).
@@ -19,7 +21,7 @@ HarolDownloader is a Python application built with Tkinter that allows you to ea
 2. Clone the HarolDownloader repository from GitHub:
 
 ```bash
-git clone https://github.com/wasp-bytee/HarolDownloader.git
+git clone https://github.com/wasp-byte/HarolDownloader.git
 ```
 
 3. Change into the project directory:
@@ -54,7 +56,7 @@ python main.py
 
 7. Using the file dialog choose your preferred file location.
 
-<img src="single.jpeg" align="center" />
+<img src="readme/single.jpeg" align="center" />
 
 ## Usage Playlist
 
@@ -78,13 +80,13 @@ python main.py
 
 8. Using the file dialog choose your preferred file location.
 
-<img src="playlists.jpeg" align="center" />
+<img src="readme/playlists.jpeg" align="center" />
 
 ## Acknowledgments
 
 The HarolDownloader app is inspired by the meme "Hide the Pain Harold," which represents a man smiling despite his hidden pain. The app's name is a playful reference to this meme.
 
-<img src="acknowledgments.jpeg" align="left" />
+<img src="readme/acknowledgments.jpeg" align="left" />
 
 ## License
 
