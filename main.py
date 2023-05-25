@@ -44,6 +44,9 @@ def load():
     if not check_url(link):
         alert("Incorrect URL", "Please write correct url")
         return
+    
+    listboxer.delete(0, tk.END)
+    
     if single:   
         try: 
             #youtube
