@@ -15,7 +15,7 @@ from random import randint
 # making main window. some settings here
 root = tk.Tk()
 root.geometry('600x400')
-root.iconbitmap('haroldownloader.ico')
+root.iconphoto(False, tk.PhotoImage(file='haroldownloader.png'))
 root.resizable(False, False)
 root.title("HarolDownloader")
 background = "haroldback.png"
@@ -117,6 +117,8 @@ def download():
     if single:
         thread = threading.Thread(target=downanim)
         thread.start()
+        select = listboxer.curselection()[0]
+        tag = itag[int(select)]
         foldername = filedialog.askdirectory()
         if foldername == "":
             return
@@ -124,8 +126,6 @@ def download():
         r = randint(0, 420)
         link = "https://youtu.be/dQw4w9WgXcQ" if r == 69 else url.get().strip()
         yt = YouTube(link)
-        select = listboxer.curselection()[0]
-        tag = itag[int(select)]
         exten = "." + listboxer.get(tk.ANCHOR).split(" ")[2]
         stream = yt.streams.get_by_itag(tag)
         stream.download(output_path=foldername, filename=clean_title(yt.title) + exten)
@@ -134,6 +134,7 @@ def download():
         pl_urls = [pl_urls[i] for i in listboxer.curselection()]
         # you have to make one change to cipher.py in pytube for more than 3 videos to work
         # https://stackoverflow.com/questions/70776558/pytube-exceptions-regexmatcherror-init-could-not-find-match-for-w-w
+        # https://stackoverflow.com/questions/68945080/pytube-exceptions-regexmatcherror-get-throttling-function-name-could-not-find
         ytbs = [YouTube(u) for u in pl_urls]
         ytbs_streams = [[str(j) for j in i.streams] for i in ytbs]
         ytbs_streams = list(set.intersection(*map(set, ytbs_streams)))

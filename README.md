@@ -1,4 +1,4 @@
-<img src="haroldownloader.ico" align="right" />
+<img src="haroldownloader.png" align="right" />
 
 # HarolDownloader 
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/wasp-byte/HarolDownloader)
