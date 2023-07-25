@@ -39,7 +39,6 @@ def load():
     play()
     link = url.get().strip()
     single = "list=" not in link
-
     #checking url correctivness
     if not check_url(link):
         alert("Incorrect URL", "Please write correct url")
@@ -80,6 +79,7 @@ def load():
             itag.append(i.itag)
             listboxer.insert(tk.END, f"audio {i.abr} {ext}")
     else:
+        btn_dall.place(x=320,y=240)
         # displaying titles to choose and storing the video urls
         global pl_urls
         try:
@@ -95,7 +95,13 @@ def load():
 
 
 chosen = False
-def download():
+
+
+def dall():
+    download(True)
+
+
+def download(oll:bool=False):
     global pl_urls
     global chosen
     global itag
@@ -131,7 +137,7 @@ def download():
         stream.download(output_path=foldername, filename=clean_title(yt.title) + exten)
     else:
         listboxer.config(selectmode="normal")
-        pl_urls = [pl_urls[i] for i in listboxer.curselection()]
+        pl_urls = [pl_urls[i] for i in listboxer.curselection()] if not oll else pl_urls
         # you have to make one change to cipher.py in pytube for more than 3 videos to work
         # https://stackoverflow.com/questions/70776558/pytube-exceptions-regexmatcherror-init-could-not-find-match-for-w-w
         # https://stackoverflow.com/questions/68945080/pytube-exceptions-regexmatcherror-get-throttling-function-name-could-not-find
@@ -156,6 +162,7 @@ def download():
                 listboxer.insert(tk.END, string)
             itag.append(changer(i, "itag"))
         chosen = True
+        btn_dall.place_forget()
 
 
 
@@ -231,9 +238,14 @@ btn_load.pack()
 listboxer = tk.Listbox(root, width=70, font=Fonts)
 listboxer.pack()
 
+
 #btn to download choosen video
 btn_download = tk.Button(root, text="download", bg="#ff2021",
                  activebackground="#ff2021", fg="#FFFFFF", command=download, font=Font)
-btn_download.pack()
+btn_download.place(x=225,y=240)
+
+btn_dall= tk.Button(root, text="all", bg="#ff2021",
+                 activebackground="#ff2021", fg="#FFFFFF", command=dall, font=Font)
+
 
 root.mainloop()
