@@ -29,8 +29,9 @@ pygame.mixer.init()
 pl_urls = []
 itag = []
 
-#store if the link is single or playlsit
+# store if the link is single or playlsit
 single = True
+
 
 def load():
     global single
@@ -39,18 +40,18 @@ def load():
     play()
     link = url.get().strip()
     single = "list=" not in link
-    #checking url correctivness
+    # checking url correctivness
     if not check_url(link):
         alert("Incorrect URL", "Please write correct url")
         return
-    
+
     listboxer.delete(0, tk.END)
-    
-    if single:   
-        try: 
-            #youtube
+
+    if single:
+        try:
+            # youtube
             yt = YouTube(link)
-            #sorting all possible youtube videos
+            # sorting all possible youtube videos
             video_audio = yt.streams.filter(progressive=True)[::-1]
             video = yt.streams.filter(only_video=True)
             audio = yt.streams.filter(only_audio=True)
@@ -63,11 +64,12 @@ def load():
         listboxer.config(selectmode="normal")
         listboxer.delete(0, tk.END)
 
-        #showing all items in listbox and appending their itag to list
+        # showing all items in listbox and appending their itag to list
         for i in video_audio:
             ext = i.mime_type.split("/")[1]
             itag.append(i.itag)
-            listboxer.insert(tk.END, f"{i.resolution} {i.fps}fps {ext} with audio")
+            listboxer.insert(
+                tk.END, f"{i.resolution} {i.fps}fps {ext} with audio")
         for i in video:
             ext = i.mime_type.split("/")[1]
             itag.append(i.itag)
@@ -79,7 +81,7 @@ def load():
             itag.append(i.itag)
             listboxer.insert(tk.END, f"audio {i.abr} {ext}")
     else:
-        btn_dall.place(x=320,y=240)
+        btn_dall.place(x=320, y=240)
         # displaying titles to choose and storing the video urls
         global pl_urls
         try:
@@ -101,7 +103,7 @@ def dall():
     download(True)
 
 
-def download(oll:bool=False):
+def download(oll: bool = False):
     global pl_urls
     global chosen
     global itag
@@ -118,7 +120,9 @@ def download(oll:bool=False):
             yt = YouTube(vid)
             exten = "." + listboxer.get(tk.ANCHOR).split(" ")[2]
             stream = yt.streams.get_by_itag(tag)
-            stream.download(output_path=foldername, filename=clean_title(yt.title) + exten)
+            stream.download(output_path=foldername,
+                            filename=clean_title(yt.title) + exten)
+        alert("Succes", "Download complete. Take coffe and relax", kind="info")
         return
     if single:
         thread = threading.Thread(target=downanim)
@@ -134,10 +138,13 @@ def download(oll:bool=False):
         yt = YouTube(link)
         exten = "." + listboxer.get(tk.ANCHOR).split(" ")[2]
         stream = yt.streams.get_by_itag(tag)
-        stream.download(output_path=foldername, filename=clean_title(yt.title) + exten)
+        stream.download(output_path=foldername,
+                        filename=clean_title(yt.title) + exten)
+        alert("Succes", "Download complete. Take coffe and relax", kind="info")
     else:
         listboxer.config(selectmode="normal")
-        pl_urls = [pl_urls[i] for i in listboxer.curselection()] if not oll else pl_urls
+        pl_urls = [pl_urls[i]
+                   for i in listboxer.curselection()] if not oll else pl_urls
         # you have to make one change to cipher.py in pytube for more than 3 videos to work
         # https://stackoverflow.com/questions/70776558/pytube-exceptions-regexmatcherror-init-could-not-find-match-for-w-w
         # https://stackoverflow.com/questions/68945080/pytube-exceptions-regexmatcherror-get-throttling-function-name-could-not-find
@@ -152,7 +159,8 @@ def download(oll:bool=False):
                 res = changer(i, "res")
                 fps = changer(i, "fps")
                 ext = changer(i, "mime_type").split("/")[1]
-                is_audio = "with audio" if changer(i, "progressive") == "True" else ""
+                is_audio = "with audio" if changer(
+                    i, "progressive") == "True" else ""
                 string = f"{res} {fps} {ext} {is_audio}"
                 listboxer.insert(tk.END, string)
             else:
@@ -165,16 +173,17 @@ def download(oll:bool=False):
         btn_dall.place_forget()
 
 
-
 def check_url(link):
     u = requests.get(f"https://www.youtube.com/oembed?format=json&url={link}")
     if u.status_code != 200:
         return False
     return True
 
+
 def clear_url():
     play()
     e.delete(0, 'end')
+
 
 def changer(text, s):
     pattern = r'{0}="([^"]*)"'.format(s)
@@ -184,15 +193,19 @@ def changer(text, s):
     else:
         return None
 
+
 def clean_title(title):
     word = ["/", "\\", ":", "\"", "*", "?", "<", ">", "|", "."]
     title = "".join(list(filter(lambda i: not i in word, title.split("|")[0])))
     return title
 
+
 def downanim():
     import anim
 
 # some cool staff here to make the app more powerfull
+
+
 def alert(title, message, kind='warning'):
     if kind == "warning":
         pygame.mixer.music.load('harold_error_clicker.mp3')
@@ -200,10 +213,12 @@ def alert(title, message, kind='warning'):
     show_method = getattr(messagebox, 'show{}'.format(kind))
     show_method(title, message)
 
+
 def play():
     # yes we use pygame because tkinter not support changing audio :DDDD
     pygame.mixer.music.load('harold_clicker.mp3')
     pygame.mixer.music.play(loops=0)
+
 
 def chanima(yt):
     u = requests.get(yt.thumbnail_url)
@@ -211,41 +226,42 @@ def chanima(yt):
     label.configure(image=img)
     label.image = img
 
-#some sick fonts here
+
+# some sick fonts here
 Font = ("Cambria", 14)
 Fonts = ("Cambria", 9, "bold")
 
-#set background
+# set background
 backimg = tk.PhotoImage(file=background)
 label = tk.Label(root, image=backimg)
 label.place(x=0, y=0)
 
-#btn that clear text
+# btn that clear text
 btn_clear = tk.Button(root, text="x", bg="#ff2021",
-                 activebackground="#ff2021", fg="#FFFFFF", command=clear_url, width=2, font=Fonts)
+                      activebackground="#ff2021", fg="#FFFFFF", command=clear_url, width=2, font=Fonts)
 btn_clear.pack(side='right', anchor='ne')
 
-#entry that get from user url
+# entry that get from user url
 e = tk.Entry(root, textvariable=url, width=69, font=Font)
 e.pack()
 
-#button to load data from url
+# button to load data from url
 btn_load = tk.Button(root, text="load", bg="#ff2021",
-                activebackground="#ff2021", fg="#FFFFFF", command=load, font=Font)
+                     activebackground="#ff2021", fg="#FFFFFF", command=load, font=Font)
 btn_load.pack()
 
-#load data into listbox
+# load data into listbox
 listboxer = tk.Listbox(root, width=70, font=Fonts)
 listboxer.pack()
 
 
-#btn to download choosen video
+# btn to download choosen video
 btn_download = tk.Button(root, text="download", bg="#ff2021",
-                 activebackground="#ff2021", fg="#FFFFFF", command=download, font=Font)
-btn_download.place(x=225,y=240)
+                         activebackground="#ff2021", fg="#FFFFFF", command=download, font=Font)
+btn_download.place(x=225, y=240)
 
-btn_dall= tk.Button(root, text="all", bg="#ff2021",
-                 activebackground="#ff2021", fg="#FFFFFF", command=dall, font=Font)
+btn_dall = tk.Button(root, text="all", bg="#ff2021",
+                     activebackground="#ff2021", fg="#FFFFFF", command=dall, font=Font)
 
 
 root.mainloop()
