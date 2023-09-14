@@ -1,14 +1,15 @@
-<img src="haroldownloader.png" align="right" />
+<img src="haroldownloader.png" align="right" width=245/>
 
 # HarolDownloader 
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/wasp-byte/HarolDownloader)
 ![GitHub](https://img.shields.io/github/license/wasp-byte/HarolDownloader?color=%23FF2021&label=version&style=for-the-badge')
 ![GitHub last commit](https://img.shields.io/github/last-commit/wasp-byte/HarolDownloader)
 
-HarolDownloader is a Python application built with Tkinter that allows you to easily download YouTube videos or audio files. Whether you want to save an individual video, extract audio from a video, or even download videos from a playlist, HarolDownloader has got you covered.
+HarolDownloader is a Python application built with Tkinter that allows you to easily download YouTube or spotify videos or audio files. Whether you want to save an individual video, extract audio from a video, or even download videos from a playlist, HarolDownloader has got you covered.
 
 ## Features
 
+- Downlaod spotify
 - Download YouTube videos or audio files effortlessly.
 - Supports downloading both individual videos and entire playlists.
 - Choose between downloading video or audio only.

@@ -1,5 +1,6 @@
 # importing some sick libraries
 import tkinter as tk
+import customtkinter as ctk
 from tkinter import messagebox
 from tkinter import filedialog
 from tkinter.ttk import *
@@ -8,17 +9,25 @@ from io import BytesIO
 from PIL import ImageTk, Image
 import requests
 from pytube import YouTube, Playlist
-import threading
 import re
 from random import randint
 
 # making main window. some settings here
-root = tk.Tk()
+root = ctk.CTk()
 root.geometry('600x400')
 root.iconphoto(False, tk.PhotoImage(file='haroldownloader.png'))
 root.resizable(False, False)
 root.title("HarolDownloader")
 background = "haroldback.png"
+
+colors = {
+    "green-dark": "#005c00",
+    "green-dark+": "#004b00",
+    "green-bright": "#0ecd0e",
+    "yellow": "#f2f230",
+    "bg": "#282828",
+    "text": "#ffffff"
+}
 
 # i dont know why its here
 url = tk.StringVar()
@@ -29,27 +38,58 @@ pygame.mixer.init()
 pl_urls = []
 itag = []
 
+link = ""
+
 # store if the link is single or playlsit
 single = True
 
+chosen = False
 
-def load():
-    global single
-    global itag
+def clear_url(_):
+    play()
+    e.delete(0, 'end')
 
+def play():
+    # yes we use pygame because tkinter not support changing audio :DDDD
+    pygame.mixer.music.load('harold_clicker.mp3')
+    pygame.mixer.music.play(loops=0)
+
+
+def back():
+    global backimg
+    play()
+    f_search.pack(expand=True, anchor="center", padx=25)
+    btn_backtosearch.place_forget()
+    listboxer.pack_forget()
+    f_d.pack_forget()
+    label.configure(image=backimg)
+    label.image = backimg
+
+
+def enter(event):
+    if event.keysym == 'Return':
+        search()
+
+def search():
+    global link, single, itag
     play()
     link = url.get().strip()
-    single = "list=" not in link
-    # checking url correctivness
     if not check_url(link):
         alert("Incorrect URL", "Please write correct url")
         return
-
+    if "open.spotify.com" in link:
+        link = get_yt_url(link)
+        single = True
+    else:
+        single = "list=" not in link
     listboxer.delete(0, tk.END)
-
+    f_search.pack_forget()
+    btn_backtosearch.place(x=20, y=20)
+    listboxer.pack(pady=80)
+    f_d.pack()
     if single:
+        btn_download.pack()
         try:
-            # youtube
             yt = YouTube(link)
             # sorting all possible youtube videos
             video_audio = yt.streams.filter(progressive=True)[::-1]
@@ -81,7 +121,8 @@ def load():
             itag.append(i.itag)
             listboxer.insert(tk.END, f"audio {i.abr} {ext}")
     else:
-        btn_dall.place(x=320, y=240)
+        btn_dall.pack(side='right')
+        btn_download.pack()
         # displaying titles to choose and storing the video urls
         global pl_urls
         try:
@@ -94,23 +135,19 @@ def load():
         for video in pl.videos:
             listboxer.insert(tk.END, video.title)
         pl_urls = pl.video_urls
+    
 
 
-chosen = False
-
-
-def dall():
-    download(True)
-
+def check_url(link):
+    return requests.get(f"https://www.youtube.com/oembed?url={link}").status_code == 200 or requests.get(f"https://open.spotify.com/oembed?url={link}").status_code == 200
 
 def download(oll: bool = False):
     global pl_urls
     global chosen
     global itag
+    global link
     play()
     if chosen:
-        thread = threading.Thread(target=downanim)
-        thread.start()
         select = listboxer.curselection()[0]
         tag = itag[int(select)]
         foldername = filedialog.askdirectory()
@@ -125,8 +162,6 @@ def download(oll: bool = False):
         alert("Succes", "Download complete. Take coffe and relax", kind="info")
         return
     if single:
-        thread = threading.Thread(target=downanim)
-        thread.start()
         select = listboxer.curselection()[0]
         tag = itag[int(select)]
         foldername = filedialog.askdirectory()
@@ -134,7 +169,7 @@ def download(oll: bool = False):
             return
         # ~0.2% rick easter egg ;)
         r = randint(0, 420)
-        link = "https://youtu.be/dQw4w9WgXcQ" if r == 69 else url.get().strip()
+        link = "https://youtu.be/dQw4w9WgXcQ" if r == 69 else link
         yt = YouTube(link)
         exten = "." + listboxer.get(tk.ANCHOR).split(" ")[2]
         stream = yt.streams.get_by_itag(tag)
@@ -173,16 +208,19 @@ def download(oll: bool = False):
         btn_dall.place_forget()
 
 
-def check_url(link):
-    u = requests.get(f"https://www.youtube.com/oembed?format=json&url={link}")
-    if u.status_code != 200:
-        return False
-    return True
+def chanima(yt):
+    u = requests.get(yt.thumbnail_url)
+    img = ImageTk.PhotoImage(Image.open(BytesIO(u.content)).resize((600, 400)))
+    label.configure(image=img)
+    label.image = img
 
+def alert(title, message, kind='warning'):
+    if kind == "warning":
+        pygame.mixer.music.load('harold_error_clicker.mp3')
+        pygame.mixer.music.play(loops=0)
+    show_method = getattr(messagebox, 'show{}'.format(kind))
+    show_method(title, message)
 
-def clear_url():
-    play()
-    e.delete(0, 'end')
 
 
 def changer(text, s):
@@ -199,69 +237,65 @@ def clean_title(title):
     title = "".join(list(filter(lambda i: not i in word, title.split("|")[0])))
     return title
 
-
-def downanim():
-    import anim
-
-# some cool staff here to make the app more powerfull
-
-
-def alert(title, message, kind='warning'):
-    if kind == "warning":
-        pygame.mixer.music.load('harold_error_clicker.mp3')
-        pygame.mixer.music.play(loops=0)
-    show_method = getattr(messagebox, 'show{}'.format(kind))
-    show_method(title, message)
+def get_yt_url(url):
+    response = requests.get(url)
+    i = str(response.content).find("<title>")
+    j = str(response.content).find("</title>")
+    title = str(response.content)[i+7:j]
+    response = requests.get(f'https://www.youtube.com/results?search_query={title}')
+    k = str(response.content).find("/watch?v=")
+    print(("https://www.youtube.com/watch?v="+str(response.content)[k+9:k+20]))
+    return("https://www.youtube.com/watch?v="+str(response.content)[k+9:k+20])
 
 
-def play():
-    # yes we use pygame because tkinter not support changing audio :DDDD
-    pygame.mixer.music.load('harold_clicker.mp3')
-    pygame.mixer.music.play(loops=0)
 
+def dall():
+    download(True)
 
-def chanima(yt):
-    u = requests.get(yt.thumbnail_url)
-    img = ImageTk.PhotoImage(Image.open(BytesIO(u.content)).resize((600, 400)))
-    label.configure(image=img)
-    label.image = img
 
 
 # some sick fonts here
-Font = ("Cambria", 14)
-Fonts = ("Cambria", 9, "bold")
+Font = ("caladea", 16)
+Fonts = ("caladea", 9, "bold")
 
 # set background
 backimg = tk.PhotoImage(file=background)
 label = tk.Label(root, image=backimg)
 label.place(x=0, y=0)
 
-# btn that clear text
-btn_clear = tk.Button(root, text="x", bg="#ff2021",
-                      activebackground="#ff2021", fg="#FFFFFF", command=clear_url, width=2, font=Fonts)
-btn_clear.pack(side='right', anchor='ne')
 
-# entry that get from user url
-e = tk.Entry(root, textvariable=url, width=69, font=Font)
-e.pack()
+f_search = tk.Frame(root)
+f_search.pack(expand=True, anchor="center", padx=25)
 
-# button to load data from url
-btn_load = tk.Button(root, text="load", bg="#ff2021",
-                     activebackground="#ff2021", fg="#FFFFFF", command=load, font=Font)
-btn_load.pack()
+Style().configure('TButton', background=colors["green-dark"], activebackground=colors["green-bright"], foreground=colors["yellow"], font=Font)
+Style().map('TButton',background=[('active', colors["green-dark+"])])
 
-# load data into listbox
-listboxer = tk.Listbox(root, width=70, font=Fonts)
-listboxer.pack()
+btn_search = Button(f_search, width=3, text="🔍", command=search)
+btn_search.pack(side='right', anchor='ne', ipady=2)
 
+Style().configure('TEntry', borderwidth=0,  insertcolor=colors["text"], fieldbackground=colors["bg"], foreground=colors["text"])
 
-# btn to download choosen video
-btn_download = tk.Button(root, text="download", bg="#ff2021",
-                         activebackground="#ff2021", fg="#FFFFFF", command=download, font=Font)
-btn_download.place(x=225, y=240)
+f_eb = tk.Frame(f_search, background=colors["bg"])
+f_eb.pack()
 
-btn_dall = tk.Button(root, text="all", bg="#ff2021",
-                     activebackground="#ff2021", fg="#FFFFFF", command=dall, font=Font)
+btn_clear = Label(f_eb, width=2, text="x", anchor="center", background=colors["bg"], foreground=colors["yellow"], font=Font)
+btn_clear.pack(side='right', anchor='center')
+
+e = Entry(f_eb, textvariable=url, width=50, justify="center", font=Font)
+e.pack(ipady=6, ipadx=20)
+e.focus()
+
+listboxer = tk.Listbox(root, width=70, font=Fonts, background=colors["bg"], bd=0, highlightthickness=0, foreground=colors["text"])
+
+f_d = tk.Frame(root)
+
+btn_download = Button(f_d, text="Download", command=download)
+btn_dall = Button(f_d, text="all", command=dall, width=3)
+
+btn_backtosearch = Button(root, width=3, text="🔙", command=back)
+
+btn_clear.bind("<Button-1>", clear_url)
+e.bind("<Key>", enter)
 
 
 root.mainloop()
