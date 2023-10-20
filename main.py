@@ -1,6 +1,5 @@
 # importing some sick libraries
 import tkinter as tk
-import customtkinter as ctk
 from tkinter import messagebox
 from tkinter import filedialog
 from tkinter.ttk import *
@@ -13,7 +12,7 @@ import re
 from random import randint
 
 # making main window. some settings here
-root = ctk.CTk()
+root = tk.Tk()
 root.geometry('600x400')
 root.iconphoto(False, tk.PhotoImage(file='haroldownloader.png'))
 root.resizable(False, False)
@@ -255,8 +254,8 @@ def dall():
 
 
 # some sick fonts here
-Font = ("caladea", 16)
-Fonts = ("caladea", 9, "bold")
+Font = ("Lucida Console", 16)
+Fonts = ("Lucida Console", 9, "bold")
 
 # set background
 backimg = tk.PhotoImage(file=background)
@@ -267,21 +266,18 @@ label.place(x=0, y=0)
 f_search = tk.Frame(root)
 f_search.pack(expand=True, anchor="center", padx=25)
 
-Style().configure('TButton', background=colors["green-dark"], activebackground=colors["green-bright"], foreground=colors["yellow"], font=Font)
-Style().map('TButton',background=[('active', colors["green-dark+"])])
 
-btn_search = Button(f_search, width=3, text="🔍", command=search)
-btn_search.pack(side='right', anchor='ne', ipady=2)
+btn_search = tk.Button(f_search, width=2, text="🔍", command=search, background=colors["green-dark"], foreground=colors["yellow"], activebackground=colors["green-dark+"], activeforeground=colors["yellow"], font=Font)
+btn_search.pack(side='right', anchor='ne')
 
-Style().configure('TEntry', borderwidth=0,  insertcolor=colors["text"], fieldbackground=colors["bg"], foreground=colors["text"])
 
 f_eb = tk.Frame(f_search, background=colors["bg"])
-f_eb.pack()
+f_eb.pack(ipady=1)
 
-btn_clear = Label(f_eb, width=2, text="x", anchor="center", background=colors["bg"], foreground=colors["yellow"], font=Font)
+btn_clear = tk.Label(f_eb, width=2, text="x", anchor="center", background=colors["bg"], foreground=colors["yellow"], font=Font,)
 btn_clear.pack(side='right', anchor='center')
 
-e = Entry(f_eb, textvariable=url, width=50, justify="center", font=Font)
+e = tk.Entry(f_eb, textvariable=url, width=50, justify="center", font=Font, bd = 0, borderwidth=0, background=colors["bg"], foreground=colors["text"])
 e.pack(ipady=6, ipadx=20)
 e.focus()
 
@@ -289,10 +285,10 @@ listboxer = tk.Listbox(root, width=70, font=Fonts, background=colors["bg"], bd=0
 
 f_d = tk.Frame(root)
 
-btn_download = Button(f_d, text="Download", command=download)
-btn_dall = Button(f_d, text="all", command=dall, width=3)
+btn_download = tk.Button(f_d, text="Download", background=colors["green-dark"], foreground=colors["yellow"], activebackground=colors["green-dark+"], activeforeground=colors["yellow"], font=Font, command=download)
+btn_dall = tk.Button(f_d, text="all", command=dall, width=3)
 
-btn_backtosearch = Button(root, width=3, text="🔙", command=back)
+btn_backtosearch = tk.Button(root, width=3, text="🔙", background=colors["green-dark"], foreground=colors["yellow"], activebackground=colors["green-dark+"], activeforeground=colors["yellow"], font=Font, command=back)
 
 btn_clear.bind("<Button-1>", clear_url)
 e.bind("<Key>", enter)
